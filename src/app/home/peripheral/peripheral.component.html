@@ -1,0 +1,55 @@
+<ActionBar>
+  <Label text="{{ !peripheral ? 'Connecting to ' + uuid + '...' : 'Connected to ' + peripheral?.name + ' (' + peripheral?.UUID + ')' }}"></Label>
+</ActionBar>
+
+<StackLayout>
+  <StackLayout *ngIf="peripheral" class="m-10" style="border-color: #ddd; border-width: 1">
+    <FlexboxLayout justifyContent="space-between">
+      <button width="100%" class="-primary" text="Discover All" (tap)="discoverAll()"></button>
+    </FlexboxLayout>
+  </StackLayout>
+  <StackLayout *ngIf="peripheral" class="m-10" style="border-color: #ddd; border-width: 1">
+    <ScrollView>
+      <StackLayout>
+        <StackLayout *ngFor="let service of peripheral.services">
+          <StackLayout orientation="horizontal" width="100%">
+            <Label
+              [text]="'Service: ' + service.UUID"
+              class="m-5"
+              fontSize="14"
+              fontWeight="bold"
+              width="100%"
+              textAlignment="left"
+              verticalAlignment="center"
+            ></Label>
+          </StackLayout>
+          <StackLayout *ngFor="let characteristic of service.characteristics" class="m-l-15" width="100%">
+            <Label
+              [text]="'Characteristic: ' + characteristic.UUID"
+              class="m-t-5 m-l-25"
+              fontSize="14"
+              fontWeight="bold"
+              width="100%"
+              textAlignment="left"
+              verticalAlignment="center"
+            ></Label>
+            <StackLayout width="100%">
+              <FlexboxLayout justifyContent="space-between">
+                <Button *ngIf="characteristic.properties.read" width="100%" class="-primary" text="Read" (tap)="read(service, characteristic)"></Button>
+                <Button *ngIf="characteristic.properties.write" width="100%" class="-primary" text="Write" (tap)="write(service, characteristic)"></Button>
+                <Button
+                  *ngIf="characteristic.properties.writeWithoutResponse"
+                  width="100%"
+                  class="-primary"
+                  text="Write Without Response"
+                  (tap)="writeWithoutResponse(service, characteristic)"
+                ></Button>
+                <Button *ngIf="characteristic.properties.notify" width="100%" class="-primary" text="Notify" (tap)="notify(service, characteristic)"></Button>
+              </FlexboxLayout>
+            </StackLayout>
+          </StackLayout>
+        </StackLayout>
+      </StackLayout>
+    </ScrollView>
+  </StackLayout>
+</StackLayout>

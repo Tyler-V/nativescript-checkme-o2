@@ -1,0 +1,41 @@
+<ActionBar>
+  <Label text="Bluetooth Scanner" fontSize="20"></Label>
+</ActionBar>
+
+<StackLayout class="page">
+  <StackLayout class="m-x-10 m-t-10" style="border-color: #ddd; border-width: 1;">
+    <StackLayout orientation="horizontal" width="100%">
+      <Label text="General" class="m-t-5" fontSize="14" fontWeight="bold" width="100%" textAlignment="center" verticalAlignment="center"></Label>
+    </StackLayout>
+    <FlexboxLayout justifyContent="space-between">
+      <Button
+        width="100%"
+        [ngClass]="isBluetoothEnabled ? 'enabled' : 'disabled'"
+        text="{{ isBluetoothEnabled ? 'Bluetooth Enabled' : 'Enable Bluetooth' }}"
+        (tap)="enableBluetooth()"
+      ></Button>
+      <Button width="100%" class="-primary" text="Check Bluetooth" (tap)="checkBluetoothEnabled()"></Button>
+    </FlexboxLayout>
+    <Button class="-primary" [ngClass]="{ disabled: isScanning }" text="{{ isScanning ? 'Stop Scanning' : 'Start Scanning' }}" (tap)="scan()"></Button>
+  </StackLayout>
+  <StackLayout class="m-x-10 m-t-10" style="border-color: #ddd; border-width: 1;">
+    <StackLayout orientation="horizontal" width="100%">
+      <Label text="Known Peripherals" class="m-t-5" fontSize="14" fontWeight="bold" width="100%" textAlignment="center" verticalAlignment="center"></Label>
+    </StackLayout>
+    <Button class="-primary" text="Checkme O2™ Smart Wrist Pulse Oximeter" (tap)="connectToPeripheral('A4:34:F1:DC:71:7C')"></Button>
+    <Button class="-primary" text="CONTOUR®NEXT ONE Smart Meter" (tap)="connectToPeripheral('A4:34:F1:DC:71:7C')"></Button>
+    <Button class="-primary" text="CVS Health™ Advanced Bluetooth Glucose Meter" (tap)="connectToPeripheral('88:6B:0F:7B:41:35')"></Button>
+  </StackLayout>
+  <StackLayout *ngIf="peripherals.length" class="m-10" style="border-color: #ddd; border-width: 1;">
+    <StackLayout orientation="horizontal" width="100%">
+      <Label text="Peripherals" class="m-t-5" fontSize="14" fontWeight="bold" width="100%" textAlignment="center" verticalAlignment="center"></Label>
+    </StackLayout>
+    <ScrollView>
+      <StackLayout>
+        <StackLayout *ngFor="let peripheral of peripherals">
+          <Button class="-outline" [text]="peripheral.name ? peripheral.name : 'Unknown'" (tap)="connectToPeripheral(peripheral.UUID)"></Button>
+        </StackLayout>
+      </StackLayout>
+    </ScrollView>
+  </StackLayout>
+</StackLayout>
